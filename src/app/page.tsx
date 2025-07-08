@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Formulario from './components/Formulario';
 import ListaRegistros from './components/ListaRegistros';
 
@@ -14,6 +14,17 @@ export interface Registro {
 
 export default function Page() {
   const [registros, setRegistros] = useState<Registro[]>([]);
+
+  useEffect(() => {
+    const datos = localStorage.getItem('registros');
+    if (datos) {
+      setRegistros(JSON.parse(datos));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('registros', JSON.stringify(registros));
+  }, [registros]);
 
   const agregarRegistro = (nuevo: Registro) => {
     setRegistros([...registros, nuevo]);
