@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Formulario from './components/Formulario';
 
 export interface Registro {
   id: number;
@@ -13,10 +14,13 @@ export interface Registro {
 export default function Page() {
   const [registros, setRegistros] = useState<Registro[]>([]);
 
+  const agregarRegistro = (nuevo: Registro) => {
+    setRegistros([...registros, nuevo]);
+  };
+
   return (
     <main>
-      <p>App si funcionando</p>
+      <Formulario agregarRegistro={agregarRegistro} />
     </main>
   );
 }
-
