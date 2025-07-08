@@ -15,7 +15,7 @@ export default function Page() {
 
   return (
     <main>
-      <p>App cargada</p>
+      <p>App si funcionando</p>
     </main>
   );
 }
