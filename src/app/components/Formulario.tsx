@@ -56,29 +56,34 @@ export default function Formulario({ agregarRegistro }: Props) {
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
       />
+
       <input
         type="number"
         placeholder="Edad"
         value={edad}
         onChange={(e) => setEdad(e.target.value)}
       />
+
       <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
         <option value="">Categoría</option>
         <option value="Evento">Evento</option>
         <option value="Proyecto">Proyecto</option>
         <option value="Beneficio">Beneficio</option>
       </select>
+
       <input
         type="text"
         placeholder="Descripción"
         value={descripcion}
         onChange={(e) => setDescripcion(e.target.value)}
       />
+
       <input
         type="date"
         value={fecha}
         onChange={(e) => setFecha(e.target.value)}
       />
+
       <button type="submit">Agregar</button>
     </form>
   );

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Formulario from './components/Formulario';
 import ListaRegistros from './components/ListaRegistros';
 
+
 export interface Registro {
   id: number;
   nombre: string;
@@ -44,6 +45,7 @@ export default function Page() {
 
   return (
     <main>
+      <h1>Registros</h1>
       <Formulario agregarRegistro={agregarRegistro} />
       <ListaRegistros
         registros={registros}
