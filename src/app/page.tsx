@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Formulario from './components/Formulario';
 import { db } from './conexionFirebase/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 export interface Registro {
   id: string;
@@ -28,14 +29,15 @@ export default function Page() {
     obtenerRegistros();
   }, []);
 
+  const agregarRegistro = async (nuevo: Omit<Registro, 'id'>) => {
+    await addDoc(collection(db, "registros"), nuevo);
+    obtenerRegistros();
+  };
+
   return (
     <main>
-      <h1>Conexión a Firestore funcionando</h1>
-      {registros.map((registro) => (
-        <div key={registro.id}>
-          <p>Nombre: {registro.nombre}</p>
-        </div>
-      ))}
+      <Formulario agregarRegistro={agregarRegistro} />
     </main>
   );
 }
+
