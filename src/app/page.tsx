@@ -1,11 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Formulario from './components/Formulario';
-import ListaRegistros from './components/ListaRegistros';
-
+import { db } from './conexionFirebase/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export interface Registro {
-  id: number;
+  id: string;
   nombre: string;
   edad: string;
   categoria: string;
@@ -16,42 +15,27 @@ export interface Registro {
 export default function Page() {
   const [registros, setRegistros] = useState<Registro[]>([]);
 
+  const obtenerRegistros = async () => {
+    const querySnapshot = await getDocs(collection(db, "registros"));
+    const datos = querySnapshot.docs.map(doc => ({
+      ...doc.data(),
+      id: doc.id
+    })) as Registro[];
+    setRegistros(datos);
+  };
+
   useEffect(() => {
-    const datos = localStorage.getItem('registros');
-    if (datos) {
-      setRegistros(JSON.parse(datos));
-    }
+    obtenerRegistros();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('registros', JSON.stringify(registros));
-  }, [registros]);
-
-  const agregarRegistro = (nuevo: Registro) => {
-    setRegistros([...registros, nuevo]);
-  };
-
-  const eliminarRegistro = (id: number) => {
-    const actualizados = registros.filter((r) => r.id !== id);
-    setRegistros(actualizados);
-  };
-
-  const editarRegistro = (editado: Registro) => {
-    const actualizados = registros.map((r) =>
-      r.id === editado.id ? editado : r
-    );
-    setRegistros(actualizados);
-  };
 
   return (
     <main>
-      <h1>Registros</h1>
-      <Formulario agregarRegistro={agregarRegistro} />
-      <ListaRegistros
-        registros={registros}
-        eliminarRegistro={eliminarRegistro}
-        editarRegistro={editarRegistro}
-      />
+      <h1>Conexión a Firestore funcionando</h1>
+      {registros.map((registro) => (
+        <div key={registro.id}>
+          <p>Nombre: {registro.nombre}</p>
+        </div>
+      ))}
     </main>
   );
 }
