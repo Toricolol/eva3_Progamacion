@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Formulario from './components/Formulario';
+import ListaRegistros from './components/ListaRegistros';
 import { db } from './conexionFirebase/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 
 export interface Registro {
   id: string;
@@ -34,10 +35,31 @@ export default function Page() {
     obtenerRegistros();
   };
 
+  const eliminarRegistro = async (id: string) => {
+    await deleteDoc(doc(db, "registros", id));
+    obtenerRegistros();
+  };
+
+  const editarRegistro = async (editado: Registro) => {
+    const ref = doc(db, "registros", editado.id);
+    await updateDoc(ref, {
+      nombre: editado.nombre,
+      edad: editado.edad,
+      categoria: editado.categoria,
+      descripcion: editado.descripcion,
+      fecha: editado.fecha
+    });
+    obtenerRegistros();
+  };
+
   return (
     <main>
       <Formulario agregarRegistro={agregarRegistro} />
+      <ListaRegistros
+        registros={registros}
+        eliminarRegistro={eliminarRegistro}
+        editarRegistro={editarRegistro}
+      />
     </main>
   );
 }
-

@@ -4,14 +4,14 @@ import { Registro } from '../page';
 
 interface Props {
   registros: Registro[];
-  eliminarRegistro: (id: number) => void;
+  eliminarRegistro: (id: string) => void;
   editarRegistro: (registro: Registro) => void;
 }
 
 export default function ListaRegistros({ registros, eliminarRegistro, editarRegistro }: Props) {
-  const [modoEdicion, setModoEdicion] = useState<number | null>(null);
-  const [formEdit, setFormEdit] = useState<Registro>({
-    id: 0,
+  const [modoEdicion, setModoEdicion] = useState<string | null>(null);
+  const [formEdit, setFormEdit] = useState<Omit<Registro, 'id'> & { id: string }>({
+    id: '',
     nombre: '',
     edad: '',
     categoria: '',
@@ -38,41 +38,39 @@ export default function ListaRegistros({ registros, eliminarRegistro, editarRegi
     setFormEdit({ ...formEdit, [name]: value });
   };
 
-  if (registros.length === 0) {
-    return <p>No hay registros aún.</p>;
-  }
+  if (registros.length === 0) return <p>No hay registros aún.</p>;
 
-
-return (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-    {registros.map((r) =>
-      modoEdicion === r.id ? (
-        <div key={r.id} style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <input name="nombre" value={formEdit.nombre} onChange={manejarCambio} />
-          <input name="edad" type="number" value={formEdit.edad} onChange={manejarCambio} />
-          <select name="categoria" value={formEdit.categoria} onChange={manejarCambio}>
-            <option value="">Seleccione</option>
-            <option value="Evento">Evento</option>
-            <option value="Proyecto">Proyecto</option>
-            <option value="Beneficio">Beneficio</option>
-          </select>
-          <input name="descripcion" value={formEdit.descripcion} onChange={manejarCambio} />
-          <input name="fecha" type="date" value={formEdit.fecha} onChange={manejarCambio} />
-          <button onClick={manejarGuardarClick}>Guardar</button>
-          <button onClick={manejarCancelar}>Cancelar</button>
-        </div>
-      ) : (
-        <div key={r.id} style={{ display: 'flex', flexDirection: 'row', gap: '15px', alignItems: 'center', padding: '10px', borderBottom: '1px solid #ccc' }}>
-          <span><strong>Nombre:</strong> {r.nombre}</span>
-          <span><strong>Edad:</strong> {r.edad}</span>
-          <span><strong>Categoría:</strong> {r.categoria}</span>
-          <span><strong>Descripción:</strong> {r.descripcion}</span>
-          <span><strong>Fecha:</strong> {r.fecha}</span>
-          <button onClick={() => manejarEditarClick(r)}>Editar</button>
-          <button onClick={() => eliminarRegistro(r.id)}>Eliminar</button>
-        </div>
-      )
-    )}
-  </div>
-);
+  return (
+    <div>
+      <h2>Lista de Registros</h2>
+      {registros.map((r) =>
+        modoEdicion === r.id ? (
+          <div key={r.id} style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid #ccc' }}>
+            <input name="nombre" value={formEdit.nombre} onChange={manejarCambio} />
+            <input name="edad" type="number" value={formEdit.edad} onChange={manejarCambio} />
+            <select name="categoria" value={formEdit.categoria} onChange={manejarCambio}>
+              <option value="">Seleccione</option>
+              <option value="Evento">Evento</option>
+              <option value="Proyecto">Proyecto</option>
+              <option value="Beneficio">Beneficio</option>
+            </select>
+            <textarea name="descripcion" value={formEdit.descripcion} onChange={manejarCambio} />
+            <input name="fecha" type="date" value={formEdit.fecha} onChange={manejarCambio} />
+            <button onClick={manejarGuardarClick}>Guardar</button>
+            <button onClick={manejarCancelar}>Cancelar</button>
+          </div>
+        ) : (
+          <div key={r.id} style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid #ccc' }}>
+            <p><strong>Nombre:</strong> {r.nombre}</p>
+            <p><strong>Edad:</strong> {r.edad}</p>
+            <p><strong>Categoría:</strong> {r.categoria}</p>
+            <p><strong>Descripción:</strong> {r.descripcion}</p>
+            <p><strong>Fecha:</strong> {r.fecha}</p>
+            <button onClick={() => manejarEditarClick(r)}>Editar</button>
+            <button onClick={() => eliminarRegistro(r.id)}>Eliminar</button>
+          </div>
+        )
+      )}
+    </div>
+  );
 }
