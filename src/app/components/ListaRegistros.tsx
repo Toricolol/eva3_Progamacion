@@ -53,6 +53,7 @@ export default function ListaRegistros({ registros, eliminarRegistro, editarRegi
               <option value="Evento">Evento</option>
               <option value="Proyecto">Proyecto</option>
               <option value="Beneficio">Beneficio</option>
+              <option value="Evaluacion">Evaluacion</option>
             </select>
             <textarea name="descripcion" value={formEdit.descripcion} onChange={manejarCambio} />
             <input name="fecha" type="date" value={formEdit.fecha} onChange={manejarCambio} />

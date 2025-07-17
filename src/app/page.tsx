@@ -54,6 +54,7 @@ export default function Page() {
 
   return (
     <main>
+      <h1>Reguistros</h1>
       <Formulario agregarRegistro={agregarRegistro} />
       <ListaRegistros
         registros={registros}
